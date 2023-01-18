@@ -1,0 +1,101 @@
+@import url("/file/css/mobile/main.css") only screen and (max-width: 900px);
+@import url("/file/css/pc/main.css") only screen and (min-width: 901px);
+
+.userList {
+  text-align: center;
+  padding-bottom: 50px;
+}
+
+.userList #Online, .userList #Online p a {
+  color: #fff;
+}
+.userList #Offline, .userList #Offline p a {
+  color: #969696;
+}
+
+.user {
+  position: relative;
+  display: inline-block;
+  background-image: linear-gradient(to right, #25252e, #ff75b5);
+  font-size: 20px;
+}
+
+.userOnline {
+  position: absolute;
+}
+
+.userImage {
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: absolute;
+  border-radius: 50%;
+}
+
+.userId {
+  position: absolute;
+}
+
+.userName {
+  position: absolute;
+}
+
+.userName a {
+  position: relative;
+  text-decoration-line: none;
+}
+
+.userName a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0px;
+  height: 3px;
+  margin: 5px 0 0;
+  transition: width 0.2s ease-in-out, opacity 0.2s ease-in-out;
+  opacity: 0;
+  background-color: #4141ff;
+}
+
+.userName a:hover::after {
+  width: 100%;
+  opacity: 1;
+}
+
+.userTitle {
+  position: absolute;
+}
+
+.userGame {
+  position: absolute;
+}
+
+.toggleSwitch {
+  position: absolute;
+  display: block;
+  border-radius: 30px;
+  background-color: #fff;
+  box-shadow: 0 0 16px 3px rgba(0, 0, 0, 15%);
+  cursor: pointer;
+  border: 3px solid #8a8a8a;
+}
+
+.toggleSwitch:hover {
+  box-shadow: 0 0 0px 20px rgba(0, 0, 0, 10%);
+}
+
+.toggleSwitch .toggleButton {
+  position: absolute;
+  transform: translateY(-50%);
+  border-radius: 50%;
+  background-color: #f03d3d;
+}
+
+.toggleSwitch.active {
+  border-color: #f03d3d;
+  /* background-color: #f03d3d; */
+}
+
+.toggleSwitch, .toggleSwitch .toggleButton {
+  transition: left 0.2s ease-in, background-color 0.2s ease-in, border-color 0.1s ease-in;
+}

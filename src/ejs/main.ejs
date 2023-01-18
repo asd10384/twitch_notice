@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <%- include ("./header.ejs") %>
+  <title>기본 페이지</title>
+  <link rel="stylesheet" href="file/css/main.css">
+  <script type="text/javascript" src="/file/js/webSocket.js"></script>
+  <script type="text/javascript" src="/file/js/client.js"></script>
+</head>
+<body onload="ThemeCheck();">
+  <div>
+    <button id="toggleTheme" onclick="toggleTheme();">테마 토글</button>
+  </div>
+  <div class="userList">
+    <!-- <div class="user" id="Online">
+      <p class="userOnline" style="color: #00ff00;">●</p>
+      <div class="userImage" style="background-image: url('https://static-cdn.jtvnw.net/jtv_user_pictures/546b6081-7984-4f00-9bb3-bd6393ec9b9c-profile_image-300x300.png');"></div>
+      <p class="userId">sah_yang</p>
+      <p class="userName"><a href="https://twitch.tv/sah_yang" title="금사향 트위치 채널보기">금사향</a></p>
+      <p class="userTitle">0113</p>
+      <p class="userGame">Just Chatting</p>
+      <label for="toggle" class="toggleSwitch" onclick="toggleButton(this, 'sah_yang');">
+        <span class="toggleButton"></span>
+      </label>
+    </div>
+    <br/> -->
+    <%- userListData %>
+  </div>
+  <script>
+    var publicKey = "<%- publicKey %>";
+    webSocketStart('<%- wsUrl %>');
+    serviceWorkerRegister();
+  </script>
+</body>
+</html>

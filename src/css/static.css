@@ -1,0 +1,52 @@
+@font-face {
+  font-family: 'KOTRAHOPE';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2110@1.0/KOTRAHOPE.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+:root {
+  --bg-light-color: #9f9f9f;
+  --text-light-color: #121212;
+  
+  --bg-dark-color: #121212;
+  --text-dark-color: #9f9f9f;
+}
+
+html {
+  --bg-color: var(--bg-light-color);
+  --text-color: var(--text-light-color);
+}
+
+html.dark {
+  --bg-color: var(--bg-dark-color);
+  --text-color: var(--text-dark-color);
+}
+
+html, body {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  background-color: var(--bg-color);
+  text-align: center;
+  color: var(--text-color);
+  margin: 0;
+  padding: 10px;
+  box-sizing: border-box;
+  font-family: KOTRAHOPE, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+  font-size: 20px;
+}
+
+input, button, select, textarea {
+font-family: inherit;
+font-size: inherit;
+-webkit-padding: 0.4em 0;
+padding: 0.4em;
+margin: 0 0 0.5em 0;
+box-sizing: border-box;
+border: 1px solid #ccc;
+border-radius: 5px;
+}
