@@ -1,11 +1,18 @@
 
 /**
  * ws.send 메세지
+ * @param {string} streamerId 
  * @returns {string} 메세지
  */
-const getmsg = () => {
-  return JSON.stringify({ id: "userListData", webPushId: localStorage.getItem("webPushId") });
+
+const getmsg = (streamerId = "") => {
+  return JSON.stringify({ id: "userListData", streamerId: streamerId, webPushId: localStorage.getItem("webPushId") });
 }
+
+/**
+ * @type {string[]}
+ */
+let streamers = [];
 
 /**
  * 
@@ -22,7 +29,7 @@ function webSocketStart(wsUrl) {
     ws.send(getmsg());
     setInterval(() => {
       if (update) ws.send(getmsg());
-    }, 5000);
+    }, 1000 * 60 * 3);
   };
   /**
    * 
@@ -30,13 +37,34 @@ function webSocketStart(wsUrl) {
    */
   ws.onmessage = (e) => {
     /**
-     * @type { { id: string; data: string; } }
+     * @type { { id: string; data: string; streamerId: string; } }
      */
     const data = JSON.parse(e.data);
-    if (data.id == "userListData") {
-      document.querySelector(".userList").innerHTML = data.data;
-    } else if (data.id == "userListDataUpdate") {
-      ws.send(getmsg());
+    if (data.id == "userListStart") {
+      streamers = data.data.split("#@#");
+    } else if (data.id == "userListData") {
+      streamers = streamers.filter(sid => sid != data.streamerId);
+      if (data.data.length != 0) {
+        let doc = document.querySelector(`div.userList div[name="${data.streamerId}"]`);
+        if (doc) {
+          doc.innerHTML = data.data;
+        } else {
+          document.querySelector('div[name="userListLoding"]')?.remove();
+          document.querySelector("div.userList").insertAdjacentHTML("beforeend", `${data.data}`);
+        }
+      }
+    } else if (data.id == "userListEnd") {
+      const streamerlist = data.data.split("#@#");
+      for (const streamerId of streamers) {
+        if (streamerlist.includes(streamerId)) streamers = streamers.filter(sid => sid != streamerId);
+      }
+      if (streamers.length > 0) {
+        for (const streamerId of streamers) {
+          document.querySelector(`div.userList div[name="${streamerId}"]`)?.remove();
+        }
+      }
+    } else if (data.id == "userListUpdate") {
+      ws.send(getmsg(data.streamerId));
     }
   }
 }

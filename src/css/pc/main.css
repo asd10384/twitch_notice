@@ -2,6 +2,7 @@
   width: 40em;
   height: 15em;
   border-radius: 40px;
+  margin: 10px auto;
 }
 
 .userOnline {
@@ -41,9 +42,16 @@
   font-size: 30px;
 }
 
-.toggleSwitch {
-  right: 50px;
-  top: 40%;
+.toggleSwitch.title {
+  right: 140px;
+  top: 7%;
+  width: 90px;
+  height: 40px;
+}
+
+.toggleSwitch.notice {
+  right: 30px;
+  top: 7%;
   width: 90px;
   height: 40px;
 }

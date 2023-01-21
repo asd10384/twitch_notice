@@ -15,7 +15,7 @@
 
 .user {
   position: relative;
-  display: inline-block;
+  display: block;
   background-image: linear-gradient(to right, #25252e, #ff75b5);
   font-size: 20px;
 }
@@ -91,11 +91,18 @@
   background-color: #f03d3d;
 }
 
+#disable {
+  border-color: rgba(0, 0, 0, 15%);
+}
+
+#disable .toggleButton {
+  background-color: rgba(0, 0, 0, 15%);
+}
+
 .toggleSwitch.active {
-  border-color: #f03d3d;
-  /* background-color: #f03d3d; */
+  border-color: #8a8a8a;
 }
 
 .toggleSwitch, .toggleSwitch .toggleButton {
-  transition: left 0.2s ease-in, background-color 0.2s ease-in, border-color 0.1s ease-in;
+  transition: left 0.1s ease-in, background-color 0.1s ease-in, border-color 0.05s ease-in;
 }

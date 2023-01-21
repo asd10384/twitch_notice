@@ -2,6 +2,7 @@
   width: 15em;
   height: 6.7em;
   border-radius: 20px;
+  margin: 5px auto;
 }
 
 .userOnline {
@@ -42,8 +43,8 @@
 }
 
 .toggleSwitch {
-  right: 20px;
-  top: 40%;
+  right: 10px;
+  top: 7%;
   width: 45px;
   height: 20px;
 }

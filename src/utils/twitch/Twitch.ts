@@ -69,20 +69,22 @@ export class TwitchClass {
     });
   }
 
-  webSocketSend() {
+  webSocketSend(streamerId: string) {
     webSocketServer.clients.forEach(async (ws) => {
       ws.send(JSON.stringify({
-        id: "userListDataUpdate",
+        id: "userListUpdate",
+        streamerId: streamerId,
         data: ""
       }));
     });
   }
 
-  async start(streamerId: string, title: string, payload: payload) {
-    this.webSocketSend();
+  async start(streamerId: string, title: string, payload: payload, detail: boolean = false) {
+    this.webSocketSend(streamerId);
     for (let ID of await QDB.getIdList()) {
       const db = await QDB.get(ID);
       if (db.subscription != "null" && db.streamerlist.includes(streamerId)) {
+        if (detail && !db.titlelist.includes(streamerId)) continue;
         wpClass?.send(db.subscription, {
           title: title,
           payload: {
@@ -116,7 +118,7 @@ export class TwitchClass {
         user.gameId = stream.gameId;
         user.gameName = stream.gameName;
         user.title = stream.title;
-        Logger.log(`${stream.userDisplayName} is now Online`);
+        // Logger.log(`${stream.userDisplayName} is now Online`);
         this.start(user.id, `${user.name}님이 방송을 시작하셨습니다.`, {
           icon: user.image,
           body: user.title
@@ -125,21 +127,21 @@ export class TwitchClass {
         if (user.gameId.length != 0 && user.gameId != stream.gameId) {
           user.gameId = stream.gameId;
           let before = user.gameName;
-          Logger.log(`${stream.userDisplayName} 카테고리 바꿈\n${user.gameName} -> ${stream.gameName}`);
+          // Logger.log(`${stream.userDisplayName} 카테고리 바꿈\n${user.gameName} -> ${stream.gameName}`);
           user.gameName = stream.gameName;
           this.start(user.id, `${user.name}님이 카테고리를 변경했습니다.`, {
             icon: user.image,
             body: `${before} -> ${stream.gameName}`
-          });
+          }, true);
         }
         if (user.title.length != 0 && user.title != stream.title) {
           let before = user.title;
-          Logger.log(`${stream.userDisplayName} 방제 바꿈\n${user.title} -> ${stream.title}`);
+          // Logger.log(`${stream.userDisplayName} 방제 바꿈\n${user.title} -> ${stream.title}`);
           user.title = stream.title;
           this.start(user.id, `${user.name}님이 방제를 변경했습니다.`, {
             icon: user.image,
             body: `${before} -> ${stream.title}`
-          });
+          }, true);
         }
       }
       this.setUser(user);
@@ -158,7 +160,7 @@ export class TwitchClass {
         user.gameName = "";
         user.title = "";
         this.setUser(user);
-        Logger.log(`${user.name.length != 0 ? user.name : user.id} stoped stream`);
+        // Logger.log(`${user.name.length != 0 ? user.name : user.id} stoped stream`);
         this.start(user.id, `${user.name}님이 방송을 종료하셨습니다.`, {
           icon: user.image
         });

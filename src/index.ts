@@ -5,10 +5,13 @@ import { existsSync, readdirSync, readFileSync, writeFileSync } from "fs";
 import path, { join } from "path";
 import { Logger } from "./utils/Logger";
 import { TwitchClass } from "./utils/twitch/Twitch";
+import { streamers } from "./utils/twitch/streamers";
 import { userListData } from "./utils/twitch/userListData";
 import * as WebSocket from "ws";
 import webPush from "web-push";
 import https from "https";
+import { publicKey, privateKey } from "../webPushKey";
+import { WebPushClass } from "./utils/webPush/WebPush";
 
 const REDIRECTPORT = process.env.REDIRECTPORT || 7778;
 const redirectapp = express();
@@ -49,8 +52,6 @@ if (!existsSync(join(__dirname, "..", "webPushKey.ts"))) {
   writeFileSync(join(__dirname, "..", "webPushKey.ts"), `export const publicKey = "${publicKey}";\nexport const privateKey = "${privateKey}";`, "utf8");
 }
 
-import { publicKey, privateKey } from "../webPushKey";
-import { WebPushClass } from "./utils/webPush/WebPush";
 webPush.setVapidDetails("mailto:tmdgks0466@naver.com", publicKey, privateKey);
 
 export var twClass: TwitchClass | undefined = undefined;
@@ -78,23 +79,46 @@ export const webSocketServer = new WebSocket.Server({
   server: server
 });
 
-webSocketServer.on("connection", async (ws, req) => {
-  const ip = req.socket.remoteAddress;
-  Logger.log("새로운 클라이언트 접속: {\n  " + ip + "\n}");
+webSocketServer.on("connection", async (ws, _req) => {
+  // const ip = req.socket.remoteAddress;
+  // Logger.log("새로운 클라이언트 접속: {\n  " + ip + "\n}");
+
+  ws.setMaxListeners(0);
 
   ws.on("message", async (message) => {
     try {
       const data = JSON.parse(message.toString());
       if (data.id == "userListData") {
-        ws.send(JSON.stringify({
-          id: "userListData",
-          data: await userListData(data.webPushId)
-        }));
+        if (data.streamerId.length != 0) {
+          ws.send(JSON.stringify({
+            id: "userListData",
+            streamerId: data.streamerId,
+            data: await userListData(data.webPushId, data.streamerId)
+          }));
+        } else {
+          ws.send(JSON.stringify({
+            id: "userListStart",
+            streamerId: "",
+            data: streamers.join("#@#")
+          }));
+          for (const streamerId of streamers) {
+            ws.send(JSON.stringify({
+              id: "userListData",
+              streamerId: streamerId,
+              data: await userListData(data.webPushId, streamerId)
+            }));
+          }
+          ws.send(JSON.stringify({
+            id: "userListEnd",
+            streamerId: "",
+            data: streamers.join("#@#")
+          }));
+        }
       }
     } catch {}
   });
 
   ws.on("close", () => {
-    Logger.log("클라이언트 접속종료: {\n  " + ip + "\n}");
+    ws.close();
   });
 });

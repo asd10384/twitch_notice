@@ -10,11 +10,13 @@ export interface Data {
   id: string;
   subscription: PushSubscription | "null";
   streamerlist: string[];
+  titlelist: string[];
 }
 interface getData {
   id?: string;
   subscription?: PushSubscription | "null";
   streamerlist?: string[];
+  titlelist?: string[];
 }
 
 const set = (Id: string, getqdb: getData) => new Promise<boolean>(async (res, rej) => {
@@ -40,7 +42,8 @@ const get = (id: string) => new Promise<Data>((res, rej) => {
       let data: Data = {
         id: id,
         subscription: "null",
-        streamerlist: []
+        streamerlist: [],
+        titlelist: []
       };
       output = data;
     }
