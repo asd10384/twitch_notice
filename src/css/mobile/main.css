@@ -42,7 +42,14 @@
   font-size: 16px;
 }
 
-.toggleSwitch {
+.toggleSwitch.title {
+  right: 70px;
+  top: 7%;
+  width: 45px;
+  height: 20px;
+}
+
+.toggleSwitch.notice {
   right: 10px;
   top: 7%;
   width: 45px;
